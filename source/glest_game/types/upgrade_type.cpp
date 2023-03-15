@@ -1375,7 +1375,7 @@ void TotalUpgrade::sum(const UpgradeTypeBase *ut, const Unit *unit, bool boostMo
 				}
 			}
 		}
-	
+
 	if(ut->getAttackSpeedIsMultiplier() == true) {
 		for(unsigned int i = 0; i < (unsigned int)unit->getType()->getSkillTypeCount(); ++i) {
 			const SkillType *skillType = unit->getType()->getSkillType(i);

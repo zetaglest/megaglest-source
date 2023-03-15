@@ -296,7 +296,7 @@ bool UnitUpdater::updateUnit(Unit *unit) {
 				spawnAttack(unit, attackSkill->getSpawnUnit(), attackSkill->getSpawnUnitCount(), 100, 100, 100, attackSkill->getSpawnUnitAtTarget());
 			}
 		}
-		
+
 		//move unit in cells
 		if(unit->getCurrSkill()->getClass() == scMove) {
 			world->moveUnitCells(unit, true);
@@ -1014,7 +1014,7 @@ void UnitUpdater::unitBeingAttacked(std::pair<bool,Unit *> &result, const Unit *
 
 			if(distToUnit < 0 || unit->getCenteredPos().dist(enemy->getCenteredPos()) < distToUnit) {
 				distToUnit = unit->getCenteredPos().dist(enemy->getCenteredPos());
-				if(ast->getAttackRange() >= distToUnit){
+				if(ast->getAttackRange() >= distToUnit && distToUnit >= ast->getAttackMinRange()){
 					result.first= true;
 					result.second= enemy;
 					break;
@@ -2673,7 +2673,7 @@ void UnitUpdater::damage(Unit *attacker, const AttackSkillType* ast, Unit *attac
 			int lootableResourceCount = attacked->getType()->getLootableResourceCount();
 			for(int i = 0; i < lootableResourceCount; i++) {
 				LootableResource resource = attacked->getType()->getLootableResource(i);
-			
+
 				// Figure out how much of the resource in question that the attacked unit's faction has
 				int factionTotalResource = 0;
 				for(int j = 0; j < attacked->getFaction()->getTechTree()->getResourceTypeCount(); j++) {
@@ -2682,7 +2682,7 @@ void UnitUpdater::damage(Unit *attacker, const AttackSkillType* ast, Unit *attac
 						break;
 					}
 				}
-			
+
 				if(resource.isNegativeAllowed()) {
 					attacked->getFaction()->incResourceAmount(resource.getResourceType(), -(factionTotalResource * resource.getLossFactionPercent() / 100));
 					attacked->getFaction()->incResourceAmount(resource.getResourceType(), -resource.getLossValue());
@@ -2945,6 +2945,7 @@ bool UnitUpdater::unitOnRange(Unit *unit, int range, Unit **rangedPtr,
 		//foundInCache = false;
 		//nearby cells
 		UnitRangeCellsLookupItem cacheItem;
+		// Combine with attack min range here?
 		for(int i = center.x - range; i < center.x + range + size; ++i) {
 			for(int j = center.y - range; j < center.y + range + size; ++j) {
 				//cells inside map and in range

@@ -178,7 +178,7 @@ public:
 	 */
 
     virtual void load(const XmlNode *upgradeNode, string upgradename);
-	
+
 	/**
 	 * Creates a string representation of the upgrade. All stat boosts are detailed on their own line
 	 * with their corresponding boosts.
@@ -186,7 +186,7 @@ public:
 	 * names as they appear in the XMLs.
 	 */
     virtual string getDesc(bool translatedValue) const;
-	
+
 	/**
 	 * Returns a string representation of this object. Lists all the value that the object stores.
 	 * For debugging purposes, only.
@@ -273,7 +273,7 @@ public:
 	    crcForUpgradeType.addInt64((int64)prodSpeedUpgradeIsMultiplierValueList.size());
 	    //std::map<string,int> prodSpeedMorphIsMultiplierValueList;
 	    crcForUpgradeType.addInt64((int64)prodSpeedMorphIsMultiplierValueList.size());
-		
+
 	    crcForUpgradeType.addInt(getAttackSpeed());
 	    crcForUpgradeType.addInt(getAttackSpeedIsMultiplier());
 
@@ -318,7 +318,7 @@ public:
     		Checksum* techtreeChecksum,
     		std::map<string,vector<pair<string, string> > > &loadedFileList,
     		bool validationMode=false);
-	
+
 	/**
 	 * Obtains the upgrade name.
 	 * @param translatedValue If true, the name is translated. Otherwise the name is returned as it
@@ -391,7 +391,7 @@ public:
 	/**
 	 * Removes the effect of an upgrade to a specific unit. Using this after applying the upgrade
 	 * is an invariant. ie,
-	 * 
+	 *
 	 *     totalUpgrade->apply(upgrade, unit);
 	 *     totalUpgrade->deapply(upgrade, unit);
 	 *     // totalUpgrade is now the same as before the call to apply()

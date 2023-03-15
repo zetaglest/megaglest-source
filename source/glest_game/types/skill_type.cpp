@@ -855,6 +855,7 @@ AttackSkillType::AttackSkillType() {
 	attackStrength=0;
 	attackVar=0;
 	attackRange=0;
+	attackMinRange=0;
 	attackStartTime=0;
 	splashDamageAll=false;
 }
@@ -892,6 +893,8 @@ void AttackSkillType::load(const XmlNode *sn, const XmlNode *attackBoostsNode,
     }
 
     attackRange= sn->getChild("attack-range")->getAttribute("value")->getIntValue();
+	if (sn->hasChild("attack-min-range"))
+		attackMinRange= sn->getChild("attack-min-range")->getAttribute("value")->getIntValue();
 	string attackTypeName= sn->getChild("attack-type")->getAttribute("value")->getRestrictedValue();
 	attackType= tt->getAttackType(attackTypeName);
 	attackStartTime= sn->getChild("attack-start-time")->getAttribute("value")->getFloatValue();
@@ -1082,6 +1085,7 @@ void AttackSkillType::saveGame(XmlNode *rootNode) {
 	attackSkillTypeNode->addAttribute("attackVar",intToStr(attackVar), mapTagReplacements);
 //    int attackRange;
 	attackSkillTypeNode->addAttribute("attackRange",intToStr(attackRange), mapTagReplacements);
+	attackSkillTypeNode->addAttribute("attackMinRange",intToStr(attackMinRange), mapTagReplacements);
 //	const AttackType *attackType;
 	if(attackType != NULL) {
 		attackSkillTypeNode->addAttribute("attackType",attackType->getName(false), mapTagReplacements);

@@ -3,9 +3,9 @@
 //
 //	Copyright (C) 2001-2008 Martiño Figueroa
 //
-//	You can redistribute this code and/or modify it under 
-//	the terms of the GNU General Public License as published 
-//	by the Free Software Foundation; either version 2 of the 
+//	You can redistribute this code and/or modify it under
+//	the terms of the GNU General Public License as published
+//	by the Free Software Foundation; either version 2 of the
 //	License, or (at your option) any later version
 // ==============================================================
 
@@ -214,7 +214,7 @@ public:
     virtual void load(const XmlNode *sn, const XmlNode *attackBoostsNode, const string &dir, const TechTree *tt,
     		const FactionType *ft, std::map<string,vector<pair<string, string> > > &loadedFileList,
     		string parentLoader);
-		
+
     bool CanCycleNextRandomAnimation(const int *animationRandomCycleCount) const;
 
     static void resetNextAttackBoostId() { nextAttackBoostId=0; }
@@ -251,7 +251,7 @@ public:
 	bool getShakeEnemyInCameraView() const	{return shakeEnemyInCameraView;}
 	bool getShakeEnemyCameraAffected() const	{return shakeEnemyCameraAffected;}
 
-	
+
 	bool isAttackBoostEnabled() const { return attackBoost.enabled; }
 	const AttackBoost * getAttackBoost() const { return &attackBoost; }
 	//virtual string getDesc(const TotalUpgrade *totalUpgrade) const= 0;
@@ -259,7 +259,7 @@ public:
 	//other
 	virtual string toString(bool translatedValue) const= 0;
 	virtual int getTotalSpeed(const TotalUpgrade *) const	{return speed;}
-	static string skillClassToStr(SkillClass skillClass); 
+	static string skillClassToStr(SkillClass skillClass);
 	static string fieldToStr(Field field);
 	virtual string getBoostDesc(bool translatedValue) const {return attackBoost.getDesc(translatedValue);}
 
@@ -267,7 +267,7 @@ public:
 };
 
 // ===============================
-// 	class StopSkillType  
+// 	class StopSkillType
 // ===============================
 
 class StopSkillType: public SkillType{
@@ -277,7 +277,7 @@ public:
 };
 
 // ===============================
-// 	class MoveSkillType  
+// 	class MoveSkillType
 // ===============================
 
 class MoveSkillType: public SkillType{
@@ -289,7 +289,7 @@ public:
 };
 
 // ===============================
-// 	class AttackSkillType  
+// 	class AttackSkillType
 // ===============================
 
 class AttackSkillType: public SkillType{
@@ -299,6 +299,7 @@ private:
     int attackStrength;
     int attackVar;
     int attackRange;
+    int attackMinRange;
 	const AttackType *attackType;
 	bool attackFields[fieldCount];
 	float attackStartTime;
@@ -309,7 +310,7 @@ private:
     bool projectile;
     //ParticleSystemTypeProjectile* projectileParticleSystemType;
 	SoundContainer projSounds;
-	
+
     bool splash;
     int splashRadius;
     bool splashDamageAll;
@@ -322,11 +323,12 @@ public:
     		const FactionType *ft, std::map<string,vector<pair<string, string> > > &loadedFileList,
     		string parentLoader);
 	virtual string toString(bool translatedValue) const;
-    
+
 	//get
 	inline int getAttackStrength() const				{return attackStrength;}
 	inline int getAttackVar() const					{return attackVar;}
 	inline int getAttackRange() const					{return attackRange;}
+	inline int getAttackMinRange() const					{return attackMinRange;}
 	inline const AttackType *getAttackType() const		{return attackType;}
 	inline bool getAttackField(Field field) const		{return attackFields[field];}
 	inline float getAttackStartTime() const			{return attackStartTime;}
@@ -343,10 +345,12 @@ public:
 	inline int getSplashRadius() const									{return splashRadius;}
 	inline bool getSplashDamageAll() const								{return splashDamageAll;}
 	inline ParticleSystemTypeSplash * getSplashParticleType() const	{return splashParticleSystemType;}
-	
+
 	//misc
 	int getTotalAttackStrength(const TotalUpgrade *totalUpgrade) const;
 	int getTotalAttackRange(const TotalUpgrade *totalUpgrade) const;
+	int getTotalAttackMinRange(const TotalUpgrade *totalUpgrade) const;
+
 	virtual int getTotalSpeed(const TotalUpgrade *totalUpgrade) const;
 	virtual int getAnimSpeedBoost(const TotalUpgrade *totalUpgrade) const;
 
@@ -355,7 +359,7 @@ public:
 
 
 // ===============================
-// 	class BuildSkillType  
+// 	class BuildSkillType
 // ===============================
 
 class BuildSkillType: public SkillType{
@@ -365,7 +369,7 @@ public:
 };
 
 // ===============================
-// 	class HarvestSkillType  
+// 	class HarvestSkillType
 // ===============================
 
 class HarvestSkillType: public SkillType{
@@ -375,7 +379,7 @@ public:
 };
 
 // ===============================
-// 	class RepairSkillType  
+// 	class RepairSkillType
 // ===============================
 
 class RepairSkillType: public SkillType{
@@ -385,7 +389,7 @@ public:
 };
 
 // ===============================
-// 	class ProduceSkillType  
+// 	class ProduceSkillType
 // ===============================
 
 class ProduceSkillType: public SkillType{
@@ -406,7 +410,7 @@ public:
 };
 
 // ===============================
-// 	class UpgradeSkillType  
+// 	class UpgradeSkillType
 // ===============================
 
 class UpgradeSkillType: public SkillType{
@@ -428,7 +432,7 @@ public:
 
 
 // ===============================
-// 	class BeBuiltSkillType  
+// 	class BeBuiltSkillType
 // ===============================
 
 class BeBuiltSkillType: public SkillType{
@@ -448,7 +452,7 @@ public:
 };
 
 // ===============================
-// 	class MorphSkillType  
+// 	class MorphSkillType
 // ===============================
 
 class MorphSkillType: public SkillType{
@@ -470,7 +474,7 @@ public:
 };
 
 // ===============================
-// 	class DieSkillType  
+// 	class DieSkillType
 // ===============================
 
 class DieSkillType: public SkillType {
@@ -486,7 +490,7 @@ private:
 
 public:
     DieSkillType();
-	
+
 	virtual void load(const XmlNode *sn, const XmlNode *attackBoostsNode, const string &dir, const TechTree *tt,
 			const FactionType *ft, std::map<string,vector<pair<string, string> > > &loadedFileList,
 			string parentLoader);
@@ -530,7 +534,7 @@ public:
 };
 
 // ===============================
-// 	class SkillFactory  
+// 	class SkillFactory
 // ===============================
 
 class SkillTypeFactory: public MultiFactory<SkillType> {
