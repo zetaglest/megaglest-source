@@ -11,9 +11,7 @@ IF(BUILD_MEGAGLEST_TESTS)
 
 	FIND_PACKAGE(CppUnit REQUIRED)
 	INCLUDE_DIRECTORIES(${CPPUNIT_INCLUDE_DIR})
-	IF(UNIX)
-		SET(EXTERNAL_LIBS ${EXTERNAL_LIBS} ${CPPUNIT_LIBRARY})
-	ENDIF()
+	SET(EXTERNAL_LIBS ${EXTERNAL_LIBS} ${CPPUNIT_LIBRARY})
 
 	FIND_PACKAGE(${SDL_VERSION_NAME} REQUIRED)
 	INCLUDE_DIRECTORIES(${${SDL_VERSION_NAME}_INCLUDE_DIR})
@@ -33,7 +31,9 @@ IF(BUILD_MEGAGLEST_TESTS)
 		endif()
 	endif()
 
-    find_package(PkgConfig REQUIRED)
+    IF(NOT MSVC)
+        find_package(PkgConfig REQUIRED)
+    ENDIF()
     IF(FORCE_STREFLOP_SOFTWRAPPER)
         pkg_search_module(STREFLOP streflop-soft)
     ELSE()
@@ -200,6 +200,24 @@ IF(BUILD_MEGAGLEST_TESTS)
 		# GLEW symbols; on platforms with a static libGLEW (e.g. FreeBSD,
 		# aarch64) the linker requires it to be listed explicitly.
 		TARGET_LINK_LIBRARIES(${TARGET_NAME} libmegaglest ${GLEW_LIBRARY} ${COMMON_LIBS})
+	ELSEIF(VCPKG_TARGET_TRIPLET)
+		# Mirrors the megaglest target, minus SDL2main: the runner has its own main()
+		find_package(Vorbis CONFIG REQUIRED)
+		find_package(SDL2 CONFIG REQUIRED)
+		TARGET_LINK_LIBRARIES(${TARGET_NAME}
+			${JPEG_LIBRARIES}
+			${LUA_LIBRARIES}
+			${MG_STREFLOP}
+			${COMMON_LIBS}
+			$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+			libmegaglest
+			Ogg::ogg
+			OpenAL::OpenAL
+			PNG::PNG
+			Vorbis::vorbis
+			Vorbis::vorbisenc
+			Vorbis::vorbisfile
+			ZLIB::ZLIB)
 	ENDIF()
 
         TARGET_LINK_LIBRARIES(${TARGET_NAME} ${EXTERNAL_LIBS})
@@ -209,11 +227,11 @@ IF(BUILD_MEGAGLEST_TESTS)
 			MESSAGE("***-- Found xvfb-run: ${XVFB_EXEC} will run tests with it.")
 
 			add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-				COMMAND ${XVFB_EXEC} --auto-servernum --server-num=770 ${EXECUTABLE_OUTPUT_PATH}${TARGET_NAME}
+				COMMAND ${XVFB_EXEC} --auto-servernum --server-num=770 $<TARGET_FILE:${TARGET_NAME}>
 				COMMENT "***-- Found MegaGlest test runner: ${TARGET_NAME} about to run unit tests via xvfb...")
 		ELSE()
 			add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-				COMMAND ${EXECUTABLE_OUTPUT_PATH}${TARGET_NAME}
+				COMMAND $<TARGET_FILE:${TARGET_NAME}>
 				COMMENT "***-- Found MegaGlest test runner: ${TARGET_NAME} about to run unit tests...")
 		ENDIF()
 	ENDIF()

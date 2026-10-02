@@ -58,6 +58,10 @@ bool isGlExtensionSupported(const char *extensionName) {
     if (cacheExtensionCheckList.find(extensionName) != cacheExtensionCheckList.end()) {
         return cacheExtensionCheckList[extensionName];
     }
+    // NULL until gladLoadGL() runs; don't cache, so later checks still work
+    if (glGetString == NULL) {
+        return false;
+    }
     const GLubyte *extensionStr = glGetString(GL_EXTENSIONS);
     const char *s = reinterpret_cast<const char *>(extensionStr);
     size_t len = strlen(extensionName);
