@@ -37,7 +37,7 @@ static int vboEnabled = 0;
 // =====================================================
 
 bool getVBOSupported() {
-    if (vboEnabled == 0) {
+    if (vboEnabled == 0 && glGetString != NULL) {
         bool value = isGlExtensionSupported("GL_ARB_vertex_buffer_object");
         vboEnabled = (value == true ? 1 : -1);
     }
